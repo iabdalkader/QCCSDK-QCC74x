@@ -224,7 +224,12 @@ static int at_query_cmd_sysram(int argc, const char **argv)
     lwip_heap = at_lwip_heap_free_size();
 #endif
     //at_response_string("+SYSRAM:%d,%d", info.free_size, info.total_size);
+#if IS_ENABLED(CONFIG_MM_ENABLE_MIN_FREE_TRACKING)
+    /* Third field: lowest free heap since boot */
+    at_response_string("+SYSRAM:%d,%d,%d", kfree_size(), lwip_heap, kmin_free_size());
+#else
     at_response_string("+SYSRAM:%d,%d", kfree_size(), lwip_heap);
+#endif
     return AT_RESULT_CODE_OK;
 }
 
