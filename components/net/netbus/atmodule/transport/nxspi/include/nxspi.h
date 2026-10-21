@@ -67,7 +67,11 @@
 #define NXSPI_NAME       ("spi0")
 #define NXSPI_DMARXCH    ("dma0_ch0")
 #define NXSPI_DMATXCH    ("dma0_ch1")
+#if CONFIG_SPI_3PIN_MODE_ENABLE
 #define NXSPI_3PINMODE   (1)
+#else
+#define NXSPI_3PINMODE   (0)
+#endif
 
 /* internal */
 #define NXSPI_SM_INIT           (0)
