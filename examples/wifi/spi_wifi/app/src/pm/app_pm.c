@@ -30,7 +30,7 @@
 #include "shell.h"
 #if defined(CFG_BLE_ENABLE)
 #include "btble_lib_api.h"
-#ifndef NXSPI_HCI
+#if !defined(NXSPI_HCI) && !defined(UART_HCI)
 #include "bluetooth.h"
 #include "conn.h"
 #include "conn_internal.h"

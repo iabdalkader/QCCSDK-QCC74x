@@ -106,6 +106,11 @@ int main(void)
 
     board_init();
 
+#if UART_HCI
+    extern int qcc74x_sys_em_config(void);
+    qcc74x_sys_em_config();
+#endif
+
     core_partition_init();
 void at_minidump_init(uint32_t, size_t);
     at_minidump_init(core_partition_addr(),core_partition_size());
@@ -115,7 +120,12 @@ void at_minidump_init(uint32_t, size_t);
         printf("[main] Error: uart0 device not found\r\n");
         return -1;
     }
+#if UART_HCI
+    /* Console disabled: GPIO21/22 used for BT HCI UART instead */
+    (void)uart0;
+#else
     shell_init_with_task(uart0);
+#endif
 
     // UART1 GPIO conflicts with SPI pins, only one can be used
     //board_uartx_gpio_init();

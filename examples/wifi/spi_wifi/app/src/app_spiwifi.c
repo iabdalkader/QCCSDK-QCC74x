@@ -15,6 +15,10 @@
 
 #include "rfparam_adapter.h"
 
+#if UART_HCI
+#include "uart_hci.h"
+#endif
+
 #define DBG_TAG "appspiwifi"
 #include "log.h"
 

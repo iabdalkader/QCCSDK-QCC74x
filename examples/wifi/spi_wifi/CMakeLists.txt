@@ -43,9 +43,26 @@ if(CONFIG_LWIP_ONHOST_ENABLE)
     sdk_add_compile_definitions(-DCONFIG_LWIP_ONHOST_IMAGE_VER="_lwip_onhost")
 endif()
 
+if(CONFIG_UART_HCI)
+    sdk_add_compile_definitions(-DUART_HCI=1)
+    target_sources(app PRIVATE
+        app/src/atmoudle/uart_hci.c
+        app/src/atmoudle/btble_dma_uart.c
+    )
+endif()
+
 if(CONFIG_OT_NCP OR CONFIG_OT_RCP)
     sdk_add_compile_definitions(-DOPENTHREAD_PROJECT_CORE_CONFIG_FILE=\"openthread-core-proj-config.h\")
     sdk_add_compile_definitions(-DOPENTHREAD_CORE_CONFIG_PLATFORM_CHECK_FILE=\"openthread-core-platform-config-check.h\")
+endif()
+
+if(CONFIG_UART_HCI)
+    # Use our modified btblecontroller library (btble_dma_uart.c.o removed,
+    # we compile our own configurable copy instead)
+    get_property(_sdk_libs GLOBAL PROPERTY SDK_LIBS)
+    list(FILTER _sdk_libs EXCLUDE REGEX "libbtblecontroller_qcc743_bleuarthci")
+    set_property(GLOBAL PROPERTY SDK_LIBS ${_sdk_libs})
+    sdk_add_static_library(${CMAKE_CURRENT_SOURCE_DIR}/lib/libbtblecontroller_qcc743_bleuarthci.a)
 endif()
 
 project(spi_wifi)

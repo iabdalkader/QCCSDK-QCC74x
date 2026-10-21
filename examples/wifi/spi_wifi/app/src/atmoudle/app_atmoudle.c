@@ -16,6 +16,10 @@
 #include <openthread_port.h>
 #endif
 
+#if UART_HCI
+#include "uart_hci.h"
+#endif
+
 #if 0
 spisync_t    *at_spisync = NULL;
 static void __spisync_gpio_init(void *arg);
@@ -141,13 +145,16 @@ fakepush_err:
 }
 SHELL_CMD_EXPORT_ALIAS(atspisync_fakepush_forpop_cmd, atfake, spisync fake push for pop);
 
-void app_atmoudle_init(void)
+int app_atmoudle_init(void)
 {
     nxspi_init();
 #if NXSPI_NET
     spinet_init();
 #endif
     at_module_init();
+#if UART_HCI
+    uarthci_init();
+#endif
 #if NXSPI_HCI
     spihci_init();
 #endif
@@ -155,5 +162,6 @@ void app_atmoudle_init(void)
     extern void ot_nxspi_notify_rxd(void);
     nxspi_rxd_callback_register(ot_nxspi_notify_rxd, NXSPI_TYPE_OT);
 #endif
+    return 0;
 }
 

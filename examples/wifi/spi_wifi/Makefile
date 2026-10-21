@@ -15,12 +15,24 @@ CONFIG_USE_LPAPP ?= y
 CONFIG_BLUETOOTH_APP ?= y
 CONFIG_BLE_HOST_CHECK ?= y
 CONFIG_HCI_ENABLE ?= n
+CONFIG_HCI_UART_ENABLE ?= n
 ifeq ($(CONFIG_HCI_ENABLE), y)
     ifneq ($(CONFIG_LWIP_ONHOST_ENABLE), y)
         $(error "Bluetooth HCI mode only runs with Wi-Fi Lwip On Host mode.")
     endif
     ifeq ($(CONFIG_BLUETOOTH_APP), y)
         $(error "BLE AT CMD NOT run Bluetooth HCI mode.")
+    endif
+endif
+ifeq ($(CONFIG_HCI_UART_ENABLE), y)
+    ifneq ($(CONFIG_LWIP_ONHOST_ENABLE), y)
+        $(error "Bluetooth HCI UART mode only runs with Wi-Fi Lwip On Host mode.")
+    endif
+    ifeq ($(CONFIG_BLUETOOTH_APP), y)
+        $(error "BLE AT CMD NOT run Bluetooth HCI UART mode.")
+    endif
+    ifeq ($(CONFIG_HCI_ENABLE), y)
+        $(error "CONFIG_HCI_ENABLE and CONFIG_HCI_UART_ENABLE are mutually exclusive.")
     endif
 endif
 
