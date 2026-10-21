@@ -433,7 +433,7 @@ static int wifi_ap_start(void)
 
     struct netif *netif = fhost_to_net_if(MGMR_VIF_AP);
 
-#ifdef CONFIG_BLUETOOTH_APP
+#if CONFIG_BLUETOOTH_APP
     AT_MODULE_INIT_WAIT(at_ble_is_busy);
 #endif
 

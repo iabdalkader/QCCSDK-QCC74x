@@ -334,7 +334,7 @@ int at_module_init(void)
     /* register http AT command */
     at_http_cmd_regist();
 #endif
-#if defined(CONFIG_BLUETOOTH_APP)
+#if CONFIG_BLUETOOTH_APP
     /* register ble AT command */
     at_ble_cmd_regist();
 #endif
