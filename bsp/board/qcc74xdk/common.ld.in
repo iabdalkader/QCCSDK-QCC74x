@@ -31,7 +31,11 @@
 #endif
 #endif
 
+#ifdef CONFIG_BLE_EM_64K
+__EM_SIZE = DEFINED(btble_controller_init) ? 64K : 0K;
+#else
 __EM_SIZE = DEFINED(btble_controller_init) ? 32K : 0K;
+#endif
 
 /* 160K */
 #define CONFIG_WRAM_ADDRESS 0x23038000 - CONFIG_WRAM_LENGTH
