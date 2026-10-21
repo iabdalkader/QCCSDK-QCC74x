@@ -32,6 +32,8 @@ sdk_add_compile_definitions(-DAT_TRANS_ZEROCOPY=1)
 
 sdk_add_compile_definitions(-DMQTT_USE_CUSTOM_SOCKET_HANDLE=1)
 sdk_add_compile_definitions(-DSHELL_THREAD_STACK_SIZE=512)
+# Track the lowest free heap, reported as the third AT+SYSRAM? field
+sdk_add_compile_definitions(-DCONFIG_MM_ENABLE_MIN_FREE_TRACKING=1)
 
 sdk_add_include_directories(.)
 sdk_add_include_directories(./app/include)
