@@ -72,6 +72,9 @@ if(NOT CONFIG_LPAPP)
                            BASE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
     sdk_set_linker_script_macro(${CMAKE_CURRENT_SOURCE_DIR}/spi_wifi.ld.in)
     sdk_add_link_options(-L ${_bsp_dir})
+    # Deeper nxspi SPI queues (default 6 x 2K per direction) so the module
+    # does not stall the host at 20+ Mbps. The buffers are in main RAM.
+    sdk_add_compile_definitions(-DNXBD_ITEMS=16)
 endif()
 
 project(spi_wifi)

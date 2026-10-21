@@ -33,7 +33,9 @@
 #ifdef NXSPI_NET
 #define NXSPI_BUFMALLOC         (0)
 #define NXBD_MTU                (2*1024)
+#ifndef NXBD_ITEMS
 #define NXBD_ITEMS              (6)
+#endif
 #define DMATX_LLIPOOL_CNT       (8) // dma config
 #define DMARX_LLIPOOL_CNT       (8) // dma config
 #else
