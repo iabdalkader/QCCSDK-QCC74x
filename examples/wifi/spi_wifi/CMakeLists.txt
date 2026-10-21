@@ -65,4 +65,13 @@ if(CONFIG_UART_HCI)
     sdk_add_static_library(${CMAKE_CURRENT_SOURCE_DIR}/lib/libbtblecontroller_qcc743_bleuarthci.a)
 endif()
 
+# Run the Wi-Fi, FreeRTOS and nxspi hot paths from RAM, as the LPAPP linker
+# script does. With common.ld.in they execute from XIP flash.
+if(NOT CONFIG_LPAPP)
+    get_filename_component(_bsp_dir ${QCC74x_SDK_BASE}/bsp/board/qcc74xdk ABSOLUTE
+                           BASE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+    sdk_set_linker_script_macro(${CMAKE_CURRENT_SOURCE_DIR}/spi_wifi.ld.in)
+    sdk_add_link_options(-L ${_bsp_dir})
+endif()
+
 project(spi_wifi)
