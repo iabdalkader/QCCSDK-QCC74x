@@ -16,6 +16,9 @@ CONFIG_BLUETOOTH_APP ?= y
 CONFIG_BLE_HOST_CHECK ?= y
 CONFIG_HCI_SPI_ENABLE ?= n
 CONFIG_HCI_UART_ENABLE ?= n
+# HCI UART pins
+CONFIG_HCI_UART_TX_PIN ?= 0
+CONFIG_HCI_UART_RX_PIN ?= 1
 ifeq ($(CONFIG_HCI_SPI_ENABLE)$(CONFIG_HCI_UART_ENABLE), yy)
     $(error "SPI and UART HCI cannot be enabled at the same time.")
 endif

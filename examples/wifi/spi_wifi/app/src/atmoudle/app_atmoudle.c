@@ -151,8 +151,8 @@ static void uart_hci_init(void)
 {
     const btble_uart_config_t uart_config = {
         .uart_id = 1,
-        .tx_pin = GPIO_PIN_0,
-        .rx_pin = GPIO_PIN_1,
+        .tx_pin = CONFIG_HCI_UART_TX_PIN,
+        .rx_pin = CONFIG_HCI_UART_RX_PIN,
         .cts_pin = 0xFF,
         .rts_pin = 0xFF,
         .baudrate = 115200,
