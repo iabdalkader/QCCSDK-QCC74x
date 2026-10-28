@@ -548,8 +548,8 @@ trans_desc_t *nxspi_readbuf_pop(uint8_t type, uint32_t timeout)
     BaseType_t result;
     QueueHandle_t q;
 
-    if (type > NXSPI_TYPE_MAX) {
-        return -1;  // Invalid input
+    if (type >= NXSPI_TYPE_MAX) {
+        return NULL;  // Invalid input
     }
     q = g_nxspi.dn[type];
 
@@ -585,7 +585,7 @@ int nxspi_read(uint8_t type, uint8_t *buf, uint16_t len, uint32_t timeout)
         NX_LOGD("arg error\r\n");
         return -1;  // Invalid input
     }
-    if (type > NXSPI_TYPE_MAX) {
+    if (type >= NXSPI_TYPE_MAX) {
         return -1;  // Invalid input
     }
 
