@@ -55,6 +55,7 @@ int at_port_init(void)
 
     return 1;
 #endif
+    return 1;
 }
 
 int at_port_deinit(void)
@@ -290,6 +291,7 @@ int at_port_netmode_get()
 int at_port_schedule_work()
 {
     nxspi_fakewrite_forread(0, NULL, 0, 0);
+    return 0;
 }
 
 static const at_device_ops spidev_ops = {
