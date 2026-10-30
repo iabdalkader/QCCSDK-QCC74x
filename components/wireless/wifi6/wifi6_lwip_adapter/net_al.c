@@ -759,43 +759,21 @@ void net_al_rx_resend(bool rx_buf_forward,
                       int offset,
                       int mac_hdr_len)
 {
-    inet_buf_tx_t *net_buf_tx_1, *net_buf_tx_2;
+    net_al_tx_t net_buf_tx;
 
-    // Allocation of the 2 buffer Tx: Ethernet header + payload @ref Rx payload
-    net_buf_tx_1 = net_buf_tx_alloc(mac_hdr_len);
-    net_buf_tx_2 = net_buf_tx_alloc_ref(length - mac_hdr_len);
-
-    if (net_buf_tx_2 == NULL) {
-        printf("WARN: AP RX resend PBUF_REF allocation failed (len=%d, pool=%d)\r\n",
-               length - mac_hdr_len, MEMP_NUM_PBUF);
-    }
-
-    if ((net_buf_tx_1 == NULL) || (net_buf_tx_2 == NULL))
-    {
-        if (net_buf_tx_1)
-            net_buf_tx_free(net_buf_tx_1);
-        if (net_buf_tx_2)
-            net_buf_tx_free(net_buf_tx_2);
-
+    /* The same Rx buffer is also delivered to the host, so don't reference
+     * it here: the Tx path writes the LLC/SNAP header in front of the
+     * payload, which would corrupt the host's copy of the frame.
+     */
+    net_buf_tx = net_buf_tx_alloc_fill((uint8_t *)payload + offset, length);
+    if (net_buf_tx == NULL) {
+        printf("WARN: AP RX resend allocation failed (len=%d)\r\n", length);
         if (!rx_buf_forward)
-        {
             fhost_rx_buf_push(buf);
-        }
+        return;
     }
-    else
-    {
-        // Update the ref of the payload
-        net_buf_tx_2->payload = payload;
-        net_buf_tx_2->payload += (mac_hdr_len + offset);
 
-        // Copy the ethernet header from Rx
-        memcpy(net_buf_tx_1->payload, (uint8_t*)payload + offset, mac_hdr_len);
-
-        //concatenate the 2 buffers Tx
-        net_buf_tx_cat(net_buf_tx_1, net_buf_tx_2);
-
-        fhost_rx_do_resend_req(buf, (net_al_tx_t)net_buf_tx_1, rx_buf_forward);
-    }
+    fhost_rx_do_resend_req(buf, net_buf_tx, rx_buf_forward);
 }
 
 /**
